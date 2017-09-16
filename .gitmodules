@@ -1,0 +1,3 @@
+[submodule "MBSP"]
+	path = MBSP
+	url = https://github.com/clips/MBSP
