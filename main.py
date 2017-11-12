@@ -1,10 +1,10 @@
 from collections import Counter
 import numpy as np
-import matplotlib.pyplot as plt
 import MBSP
 import math
 import arff
 import re
+import personae 
 
 
 def parseText(text):
@@ -53,10 +53,7 @@ def getAllDocuments(authorlist):
     for authors in authorlist:
         [documentlist.append(doc) for doc in authors.docs];
     return documentlist;   
-    
-
-    
-    
+        
 class document(object):
     def __init__(self, author, filename):
         self.author         = author;
@@ -141,38 +138,15 @@ class feature(object):
         topFeatures     = dict(Counter(self.chi2).most_common(n))
         return topFeatures.keys()
    
-        
-authors = list();
-authors.append(author('1st'));
-authors.append(author('2nd'));
-#authors.append(author('3rd'));
-
-authors[0].setDocs(['1.female.ENFJ.Dutch.OV.txt']);
-authors[1].setDocs(['2.female.ENFJ.Dutch.L.txt']);
-#authors[2].setDocs(['ttext3.txt']);
-
-docs = getAllDocuments(authors);
-
-globalFeatures = dict.fromkeys((docs[0].rawFeatures.keys()));
-
-for key in globalFeatures:
-    globalFeatures[key] = feature(key);
-    globalFeatures[key].makeGlobalFeature(docs);
-    globalFeatures[key].chiSquared(docs);
-    
-x = globalFeatures['lex1']
-y = docs[0].features['lex1']
-    
-
+   
 def exportARFF(docList, globalFeature, n, fileName):
     data = dict();
     data['attributes'] = list();
     for ida, attribute in enumerate(globalFeature.getAttributeNames(n)):
-        aName = re.sub("[^A-Za-z0-9]+", 'x', attribute.encode('unicode_escape'));     # this may need attention
+        aName = re.sub("[^A-Za-z0-9]+", 'x', attribute.encode('unicode_escape'));
         aName = globalFeature.name + '_' + str(ida) + '_' + aName;
         print aName
         data['attributes'].append( (aName, 'REAL') )
-    # [data['attributes'].append((attribute.encode('unicode_escape'), 'REAL')) for attribute in globalFeature.getAttributeNames(n)]
     
     data['attributes'].append(('author', list([author.name for author in authors])))
     data['data'] = [[None] * (n+1)] * len(docs)
@@ -187,44 +161,40 @@ def exportARFF(docList, globalFeature, n, fileName):
     fHandle = open(fileName, "w");
     arff.dump(data, fHandle);
     fHandle.close();
+            
+   
+authorDict = personae.getAuthorFileList(2)
+authors    = list();
+for idak, authorKey in enumerate(authorDict.keys()):
+    authors.append(author(authorKey))
+    authors[idak].setDocs(authorDict[authorKey])
+   
+'''     
+Testsection   
+#authors = list();
+#authors.append(author('1st'));
+#authors.append(author('2nd'));
+#authors.append(author('3rd'));
+
+#authors[0].setDocs(['1.female.ENFJ.Dutch.OV.txt']);
+#authors[1].setDocs(['2.female.ENFJ.Dutch.L.txt']);
+#authors[2].setDocs(['ttext3.txt']);
+
+docs = getAllDocuments(authors);
+
+globalFeatures = dict.fromkeys((docs[0].rawFeatures.keys()));
+
+for key in globalFeatures:
+    globalFeatures[key] = feature(key);
+    globalFeatures[key].makeGlobalFeature(docs);
+    globalFeatures[key].chiSquared(docs);
+    
+x = globalFeatures['lex1']
+y = docs[0].features['lex1']
+        
     
 exportARFF(docs, x, 50, 'features/lex1.arff')
-
-
-
-tData = {
-    u'attributes': [
-        (u'outlook', [u'sunny', u'overcast', u'rainy']),
-        (u'temperature', u'REAL'),
-        (u'humidity', u'REAL'),
-        (u'windy', [u'TRUE', u'FALSE']),
-        (u'play', [u'yes', u'no'])],
-    u'data': [
-        [u'sunny', 85.0, 85.0, u'FALSE', u'no'],
-        [u'sunny', 80.0, 90.0, u'TRUE', u'no'],
-        [u'overcast', 83.0, 86.0, u'FALSE', u'yes'],
-        [u'rainy', 70.0, 96.0, u'FALSE', u'yes'],
-        [u'rainy', 68.0, 80.0, u'FALSE', u'yes'],
-        [u'rainy', 65.0, 70.0, u'TRUE', u'no'],
-        [u'overcast', 64.0, 65.0, u'TRUE', u'yes'],
-        [u'sunny', 72.0, 95.0, u'FALSE', u'no'],
-        [u'sunny', 69.0, 70.0, u'FALSE', u'yes'],
-        [u'rainy', 75.0, 80.0, u'FALSE', u'yes'],
-        [u'sunny', 75.0, 70.0, u'TRUE', u'yes'],
-        [u'overcast', 72.0, 90.0, u'TRUE', u'yes'],
-        [u'overcast', 81.0, 75.0, u'FALSE', u'yes'],
-        [u'rainy', 71.0, 91.0, u'TRUE', u'no']
-    ],
-    u'description': u'',
-    u'relation': u'weather'
-
-}
-
-
-
-
-
-
+'''
 
 
 
