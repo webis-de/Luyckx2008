@@ -139,7 +139,7 @@ class feature(object):
         return topFeatures.keys()
    
    
-def exportARFF(docList, globalFeature, n, fileName):
+def exportARFF(docList, authorList, globalFeature, n, fileName):
     data = dict();
     data['attributes'] = list();
     for ida, attribute in enumerate(globalFeature.getAttributeNames(n)):
@@ -168,34 +168,21 @@ authors    = list();
 for idak, authorKey in enumerate(authorDict.keys()):
     authors.append(author(authorKey))
     authors[idak].setDocs(authorDict[authorKey])
-   
-'''     
-Testsection   
-#authors = list();
-#authors.append(author('1st'));
-#authors.append(author('2nd'));
-#authors.append(author('3rd'));
-
-#authors[0].setDocs(['1.female.ENFJ.Dutch.OV.txt']);
-#authors[1].setDocs(['2.female.ENFJ.Dutch.L.txt']);
-#authors[2].setDocs(['ttext3.txt']);
 
 docs = getAllDocuments(authors);
 
 globalFeatures = dict.fromkeys((docs[0].rawFeatures.keys()));
-
 for key in globalFeatures:
     globalFeatures[key] = feature(key);
     globalFeatures[key].makeGlobalFeature(docs);
-    globalFeatures[key].chiSquared(docs);
-    
-x = globalFeatures['lex1']
-y = docs[0].features['lex1']
-        
-    
-exportARFF(docs, x, 50, 'features/lex1.arff')
-'''
+    globalFeatures[key].chiSquared(docs);   
 
+    
+f = 'lex1'
+x = globalFeatures[f]
+y = docs[0].features[f]
+        
+exportARFF(docs, authors, x, 50, 'features/'+f+'.arff')
 
 
 
