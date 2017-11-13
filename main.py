@@ -145,47 +145,45 @@ def exportARFF(docList, authorList, globalFeature, n, fileName):
     for ida, attribute in enumerate(globalFeature.getAttributeNames(n)):
         aName = re.sub("[^A-Za-z0-9]+", 'x', attribute.encode('unicode_escape'));
         aName = globalFeature.name + '_' + str(ida) + '_' + aName;
-        print aName
         data['attributes'].append( (aName, 'REAL') )
     
     data['attributes'].append(('author', list([author.name for author in authors])))
-    data['data'] = [[None] * (n+1)] * len(docs)
+    data['data'] = list();
 
-    for idd in xrange(len(docList)):
-        data['data'][idd][:-1] = docList[idd].features[globalFeature.name].getFeatureVector(globalFeature, n)
-        data['data'][idd][-1]  = docList[idd].author
-        
+    for idd, doc in enumerate(docList):
+        data['data'].append(doc.features[globalFeature.name].getFeatureVector(globalFeature, n))
+        data['data'][idd].append(doc.author)
+
     data['description'] = '';
     data['relation'] = globalFeature.name;
-    
+
     fHandle = open(fileName, "w");
     arff.dump(data, fHandle);
     fHandle.close();
-            
-   
+    return(data);
+
 authorDict = personae.getAuthorFileList(2)
 authors    = list();
 for idak, authorKey in enumerate(authorDict.keys()):
     authors.append(author(authorKey))
+    print 'loading author documents of '+authorKey
     authors[idak].setDocs(authorDict[authorKey])
+    print '.. loaded'
 
 docs = getAllDocuments(authors);
 
 globalFeatures = dict.fromkeys((docs[0].rawFeatures.keys()));
+
 for key in globalFeatures:
     globalFeatures[key] = feature(key);
     globalFeatures[key].makeGlobalFeature(docs);
     globalFeatures[key].chiSquared(docs);   
-    exportARFF(docs, authors, globalFeatures[key], 50, 'features/'+key+'.arff')
+    exportARFF(docs, authors, globalFeatures[key], 5, 'features/'+key+'.arff')
     
-f = 'lex1'
+f = 'pos1'
 x = globalFeatures[f]
 y = docs[0].features[f]
         
-
-
-
-
 
 
 
