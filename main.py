@@ -151,23 +151,25 @@ def exportARFF(docList, authorList, globalFeature, n, fileName):
     data['attributes'].append(('author', list([author.name for author in authors])))
     data['data'] = [[None] * (n+1)] * len(docs)
 
-    for idd in xrange(len(docList)):
+    for idd in range(0,len(docList)):
         data['data'][idd][:-1] = docList[idd].features[globalFeature.name].getFeatureVector(globalFeature, n)
         data['data'][idd][-1]  = docList[idd].author
-        
+
     data['description'] = '';
     data['relation'] = globalFeature.name;
-    
+
     fHandle = open(fileName, "w");
     arff.dump(data, fHandle);
     fHandle.close();
-            
-   
-authorDict = personae.getAuthorFileList(2)
+    return(data);
+
+authorDict = personae.getAuthorFileList(5)
 authors    = list();
 for idak, authorKey in enumerate(authorDict.keys()):
     authors.append(author(authorKey))
+    print 'loading author documents of '+authorKey
     authors[idak].setDocs(authorDict[authorKey])
+    print '.. loaded'
 
 docs = getAllDocuments(authors);
 
@@ -176,17 +178,4 @@ for key in globalFeatures:
     globalFeatures[key] = feature(key);
     globalFeatures[key].makeGlobalFeature(docs);
     globalFeatures[key].chiSquared(docs);   
-
-    
-f = 'lex1'
-x = globalFeatures[f]
-y = docs[0].features[f]
-        
-exportARFF(docs, authors, x, 50, 'features/'+f+'.arff')
-
-
-
-
-
-
-
+    exportARFF(docs, authors, globalFeatures[key], 5, 'features/'+key+'.arff');
