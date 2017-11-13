@@ -176,13 +176,13 @@ for key in globalFeatures:
     globalFeatures[key] = feature(key);
     globalFeatures[key].makeGlobalFeature(docs);
     globalFeatures[key].chiSquared(docs);   
-
+    exportARFF(docs, authors, globalFeatures[key], 50, 'features/'+key+'.arff')
     
 f = 'lex1'
 x = globalFeatures[f]
 y = docs[0].features[f]
         
-exportARFF(docs, authors, x, 50, 'features/'+f+'.arff')
+
 
 
 
