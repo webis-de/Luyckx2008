@@ -162,7 +162,7 @@ def exportARFF(docList, authorList, globalFeature, n, fileName):
     fHandle.close();
     return(data);
 
-authorDict = personae.getAuthorFileList(2)
+authorDict = personae.getAuthorFileList(10)
 authors    = list();
 for idak, authorKey in enumerate(authorDict.keys()):
     authors.append(author(authorKey))
