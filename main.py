@@ -17,7 +17,7 @@ for key in globalFeatures:
 ''' 
     
 
-authorDict = personae.getAuthorFileList(2)
+authorDict = personae.getAuthorFileList(145)
 authors    = list();
 for idak, authorKey in enumerate(authorDict.keys()):
     authors.append(author(authorKey))
@@ -31,7 +31,7 @@ globalFeatures = dict.fromkeys((docs[0].features.keys()));
 for key in globalFeatures:
     globalFeatures[key] = globalFeature(key, docs);
     exportARFF(docs, authors, globalFeatures[key], 50, 'features/'+key+'.arff')
-    
+
 f = 'pos1'
 x = globalFeatures[f]
 y = docs[0].features[f]
