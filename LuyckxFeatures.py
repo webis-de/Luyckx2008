@@ -12,15 +12,17 @@ def parseText(text):
     lex = [u''];
     pos = [u''];
     for sentence in s:
-        lex += [w.string for w in sentence.word];
+        fwd += [w.string for w in sentence.word];
         pos += sentence.parts_of_speech;  
     
     rawFeatures = dict();
     
-    for n in xrange(1,4):
-        rawFeatures['lex%d'%n] = ngram(lex,n);
+    for n in range(1,4):
+        rawFeatures['lex%d'%n] = ngram(text,n);
         rawFeatures['pos%d'%n] = ngram(pos,n);
-        
+    
+    rawFeatures['fwd1']    = fwd;   
+    # TODO: TOC, CGP ???
     return rawFeatures    
     
 def ngram(flist, n):    
@@ -134,10 +136,11 @@ class globalFeature(object):
 
 
 def exportARFF(docList, authorList, globalFeature, n, fileName):
+    print('Writing attribute %s for %d authors... ' % globalFeature.name, len(authorList))
     data = dict();
     data['attributes'] = list();
     for ida, attribute in enumerate(globalFeature.getAttributeNames(n)):
-        aName = re.sub("[^A-Za-z0-9]+", 'x', attribute.encode('unicode_escape'));
+        aName = re.sub("[^A-Za-z0-9]+", 'x', attribute.encode('iso-8859-1'));
         aName = globalFeature.name + '_' + str(ida) + '_' + aName;
         data['attributes'].append( (aName, 'REAL') )
     
@@ -154,4 +157,6 @@ def exportARFF(docList, authorList, globalFeature, n, fileName):
     fHandle = open(fileName, "w")
     arff.dump(data, fHandle)
     fHandle.close()
+    print('done. \n')
     return(data)
+    
