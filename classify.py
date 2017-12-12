@@ -1,6 +1,8 @@
 import numpy as np
 from subprocess import call
-from matplotlib import pyplot as plt
+import matplotlib
+matplotlib.use('Agg')
+from matplotlib import pyplot as plt  
 
 import weka.core.jvm as jvm
 from weka.classifiers import Classifier

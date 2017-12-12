@@ -1,5 +1,7 @@
 from LuyckxFeatures import *
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')
 from matplotlib import pyplot as plt  
 
 authorDict = personae.getAuthorFileList(145)
@@ -36,6 +38,7 @@ for idna, na in enumerate(nAuthors):
         else:
             fTest[key]['data'][idna,:] = [globalFeatures[key].chi2[fkey] for fkey in fTest[key]['feat']]
 
+
 N = len(fTest) * 100 + 11
 x = np.transpose(np.tile( np.array(nAuthors), (5,1) ));
 for idk, key in enumerate(fTest.keys()):
@@ -44,3 +47,4 @@ for idk, key in enumerate(fTest.keys()):
     plt.legend(fTest[key]['feat'], loc=5)
 
 plt.savefig('chi2_evo.pdf')
+
