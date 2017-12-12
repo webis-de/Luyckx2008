@@ -9,7 +9,7 @@ import personae
 def parseText(text):
     p = MBSP.parse(text);
     s = MBSP.split(p);
-    lex = [u''];
+    fwd = [u''];
     pos = [u''];
     for sentence in s:
         fwd += [w.string for w in sentence.word];
