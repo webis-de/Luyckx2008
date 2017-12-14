@@ -156,6 +156,5 @@ def exportARFF(docList, authorList, globalFeature, n, fileName):
     fHandle = open(fileName, "w")
     arff.dump(data, fHandle)
     fHandle.close()
-    print('done. \n')
     return(data)
     
