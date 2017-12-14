@@ -136,7 +136,6 @@ class globalFeature(object):
 
 
 def exportARFF(docList, authorList, globalFeature, n, fileName):
-    # print('Writing attribute %s for %d authors... ' % globalFeature.name, len(authorList))
     data = dict();
     data['attributes'] = list();
     for ida, attribute in enumerate(globalFeature.getAttributeNames(n)):
