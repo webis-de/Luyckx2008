@@ -139,7 +139,7 @@ def exportARFF(docList, authorList, globalFeature, n, fileName):
     data = dict();
     data['attributes'] = list();
     for ida, attribute in enumerate(globalFeature.getAttributeNames(n)):
-        aName = re.sub("[^A-Za-z0-9]+", 'x', unicode(attribute));
+        aName = re.sub("[^A-Za-z0-9]+", 'x', attribute.decode(errors='replace'));
         aName = globalFeature.name + '_' + str(ida) + '_' + aName;
         data['attributes'].append( (aName, 'REAL') )
     
