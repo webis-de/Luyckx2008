@@ -1,12 +1,16 @@
 from collections import Counter
 import numpy as np
 import MBSP
+import pickle
 import math
 import arff
 import re
-import personae 
+import codecs
+ 
+from os.path import splitext, isfile
 
-def parseText(text):
+
+def parseText(text, fileName):
     p = MBSP.parse(text);
     s = MBSP.split(p);
     fwd = [u''];
@@ -15,16 +19,33 @@ def parseText(text):
         fwd += [w.string for w in sentence.word];
         pos += sentence.parts_of_speech;  
     
-    rawFeatures = dict();
+    features = dict()
     
     for n in range(1,4):
-        rawFeatures['lex%d'%n] = ngram(text,n);
-        rawFeatures['pos%d'%n] = ngram(pos,n);
+        features['lex%d'%n] = feature('lex%d'%n, ngram(text,n));
+        features['pos%d'%n] = feature('pos%d'%n, ngram(pos,n));
     
-    rawFeatures['fwd1']    = fwd;   
+    features['fwd1']    = feature('fwd1', fwd);   
+    
     # TODO: TOC, CGP ???
-    return rawFeatures    
     
+    with open(fileName, 'w') as f:
+        pickle.dump(features, f)
+        
+def parseCorpus(fileList):
+    N = len(fileList)
+    for idf, fName in enumerate(fileList):
+        lidf = len(str(N))
+        s    = 'Loading file %%s (%%%d.d of %%d)...' % lidf
+        print s % (fName, idf+1, N),
+        pName = splitext(fName)[0] + '.mbsp'
+        if not isfile(pName):
+            with codecs.open(fName, 'r', encoding = 'utf-8') as f:
+                text = f.read()
+                parseText(text, pName)
+        print ' %.4f %% done.' % (100.*(idf+1)/N)
+
+
 def ngram(flist, n):    
         """ 
         Returns the n-gram of a list of features
@@ -60,36 +81,31 @@ def iterMean(meanValue, newValue, N):
     
 
 class document(object):
-    def __init__(self, author, filename):
+    def __init__(self, author, filename, parsedFileName):
         self.features       = dict();
         self.author         = author;
         self.fileName       = filename;
-        self.readText();
-        
-    def textReader(self, filename):
-        """ Simple Text Reader """
-        f   = open(filename, "r")
-        txt = f.read();
-        return txt;
-        
-    def readText(self):
-        inText           = self.textReader(self.fileName);
-        rawFeatures      = parseText(inText);
-        for fName in rawFeatures.keys():
-            self.features[fName] = feature(fName, rawFeatures[fName])
-             
+        self.parsedFileName = parsedFileName;
+    
+    def loadFeatures(self):
+        with open(self.parsedFileName, 'r') as f:
+            self.features = pickle.load(f)
+    
     def addFeature(self, feature):
         self.features[feature.name] = feature; 
   
 class author(object):
     def __init__(self, name):
-        self.name = name;
-    def setDocs(self, documentFiles):
-        self.docFiles = documentFiles;
-        self.docs = list();
-        for docName in self.docFiles:
-            temp_doc = document(self.name, docName);
-            self.docs.append(temp_doc);   
+        self.name       = name;
+        self.docFiles   = list();
+        self.docs       = list();
+
+    def addDoc(self, fileName, parsedFileName):
+        self.docFiles.append(fileName);
+        temp_doc = document(self.name, fileName, parsedFileName);
+        temp_doc.loadFeatures();
+        self.docs.append(temp_doc)
+            
        
 class feature(object):
     def __init__(self, name, rawFeature):
@@ -108,7 +124,7 @@ class globalFeature(object):
         self.featureDict = dict()
         for idd, doc in enumerate(docList):
             if not doc.features.has_key(self.name):
-                raise Exception('No feature named ' + self.name);
+                raise Exception('No feature named ' + self.name + ' in ' + doc.name);
             dfDict = doc.features[name].featureDict;
             for key in set(self.featureDict.keys() + dfDict.keys()):
                 if self.featureDict.has_key(key) and dfDict.has_key(key):
@@ -135,26 +151,45 @@ class globalFeature(object):
         return topFeatures.keys()
 
 
-def exportARFF(docList, authorList, globalFeature, n, fileName):
+def exportARFF(docList, authorList, gFeature, n, fileName):
     data = dict();
     data['attributes'] = list();
-    for ida, attribute in enumerate(globalFeature.getAttributeNames(n)):
+    for ida, attribute in enumerate(gFeature.getAttributeNames(n)):
         aName = re.sub("[^A-Za-z0-9]+", 'x', attribute.decode(errors='replace'));
-        aName = globalFeature.name + '_' + str(ida) + '_' + aName;
+        aName = gFeature.name + '_' + str(ida) + '_' + aName;
         data['attributes'].append( (aName, 'REAL') )
     
     data['attributes'].append(('author', list([author.name for author in authorList])))
     data['data'] = list();
 
     for idd, doc in enumerate(docList):
-        data['data'].append(doc.features[globalFeature.name].getFeatureVector(globalFeature, n))
+        data['data'].append(doc.features[gFeature.name].getFeatureVector(gFeature, n))
         data['data'][idd].append(doc.author)
 
     data['description'] = ''
-    data['relation'] = globalFeature.name
+    data['relation'] = gFeature.name
 
     fHandle = open(fileName, "w")
     arff.dump(data, fHandle)
     fHandle.close()
     return(data)
+    
+def exportC5(docList, authorList, gFeature, n, fileName):
+    with open(fileName, "w") as fHandle:
+        for doc in docList:
+            [fHandle.write(str(val)+',') for val in doc.features[gFeature.name].getFeatureVector(gFeature, n)]
+            fHandle.write(doc.author + '\n')
+
+def importC5(fileName):
+    fVectors = list()
+    with open(fileName, "r") as fHandle:
+        c5_input = list();
+        for line in fHandle:
+            fVectors.append(line.strip('\n').split(','))
+    return fVectors
+    
+    
+    
+    
+    
     

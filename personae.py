@@ -1,5 +1,6 @@
+from LuyckxFeatures import *
 from os import listdir
-from os.path import isfile, join
+from os.path import isfile, join, splitext
 
 def arange(personae_data_path):
     personae_data_path = 'personae_original/';
@@ -24,8 +25,20 @@ def arange(personae_data_path):
         outHandle.close();    
           
 def getAuthorFileList(nAuthors):
-    aDict = dict();
+    authorDict = dict();
+    fileList   = list()
     for ida in range(0,nAuthors):
-        aDict['a'+str(ida+1)] = ['personae/'+str(ida)+'-'+str(idf)+'.txt' for idf in range(0,10)]
+        authorDict['a'+str(ida+1)] = ['personae/'+str(ida)+'-'+str(idf)+'.txt' for idf in range(0,10)]
+        [fileList.append(f) for f in authorDict['a'+str(ida+1)]]
+    return authorDict, fileList
     
-    return aDict
+def getFeaturedAuthors(nAuthors, parseBool):
+    authorDict, fileList = getAuthorFileList(nAuthors);
+    if parseBool: parseCorpus(fileList)
+    authors    = list();
+    for idak, authorKey in enumerate(authorDict.keys()):
+        authors.append(author(authorKey))
+        for fName in authorDict[authorKey]:
+            pName = splitext(fName)[0] + '.mbsp'
+            authors[idak].addDoc(fName, pName)
+    return authors
