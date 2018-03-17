@@ -4,7 +4,7 @@ attempts to implement the code described in [1].
 
 This is a reimplementation of the approach to authorship attribution originally described in
 
-> Kim Luyckx and Walter Daelemans. 2008. [Authorship attribution and verification with many authors and limited data](LINK). In Proceedings of the 22nd International Conference on Computational Linguistics - Volume 1 (COLING '08), Vol. 1. Association for Computational Linguistics, Stroudsburg, PA, USA, 513-520. [[paper]](LINK)
+> Kim Luyckx and Walter Daelemans. 2008. [Authorship attribution and verification with many authors and limited data](http://www.aclweb.org/anthology/C08-1065). In Proceedings of the 22nd International Conference on Computational Linguistics - Volume 1 (COLING '08), Vol. 1. Association for Computational Linguistics, Stroudsburg, PA, USA, 513-520. [[paper]](http://www.aclweb.org/anthology/C08-1065)
 
 It was reimplemented as part of a science reproducibility study alongside [14 other authorship attribution approaches](https://github.com/search?q="Who+wrote+the+web"+user:pan-webis-de). The results of the reproducibility study can be found in
 
@@ -52,9 +52,10 @@ where `unknown_text` is the name of an unknown text as per `meta-file.json`, `au
 ## Dependencies
 
 To operate the software, the following packages should be installed:
-	- python 2.7
-	- Memory Based Sharlow Parser [MBSP](LINK)
-	- Tilburg Memory Based Learner [Timbl](LINK)
+  - python 2.7
+  - numpy 1.13.3 or above
+  - Memory Based Sharlow Parser 1.4[MBSP](https://www.clips.uantwerpen.be/pages/MBSP)
+  - Tilburg Memory Based Learner 6.15 [Timbl](https://languagemachines.github.io/timbl/)
 
 ## License
 
