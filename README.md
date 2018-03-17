@@ -1,6 +1,5 @@
 ## luyckx2008 - Authorship attribution and verification with many authors and limited data
-Part of the Studienstiftung Kolleg "Stylometry and Paraphrasing". This subproject 
-attempts to implement the code described in [1]. 
+Part of the Studienstiftung Kolleg "Stylometry and Paraphrasing". 
 
 This is a reimplementation of the approach to authorship attribution originally described in
 
@@ -54,8 +53,8 @@ where `unknown_text` is the name of an unknown text as per `meta-file.json`, `au
 To operate the software, the following packages should be installed:
   - python 2.7
   - numpy 1.13.3 or above
-  - Memory Based Sharlow Parser 1.4[MBSP](https://www.clips.uantwerpen.be/pages/MBSP)
-  - Tilburg Memory Based Learner 6.15 [Timbl](https://languagemachines.github.io/timbl/)
+  - Memory Based Sharlow Parser 1.4 [[MBSP]](https://www.clips.uantwerpen.be/pages/MBSP)
+  - Tilburg Memory Based Learner 6.15 [[Timbl]](https://languagemachines.github.io/timbl/)
 
 ## License
 
