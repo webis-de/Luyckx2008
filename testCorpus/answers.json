@@ -1,0 +1,14 @@
+{
+  "answers": [
+    {
+      "score": 1, 
+      "unknown_text": "unknown00001.txt", 
+      "author": "candidate00001"
+    }, 
+    {
+      "score": 1, 
+      "unknown_text": "unknown00002.txt", 
+      "author": "candidate00002"
+    }
+  ]
+}

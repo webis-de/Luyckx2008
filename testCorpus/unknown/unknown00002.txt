@@ -1,0 +1,5 @@
+
+Auch in diesem Versuchsteil kann festgestellt werden, dass die Versuchsergebnisse gut mit theoretisch vorhergesagten Werten übereinstimmen. Die Abweichungen sind wie bereits erläutert minimal. Die Messunsicherheit des gyromagnetischen Faktors $g_F$ fällt deutlich zu gering aus. Dies deutet auf einen systematischen Messfehler hin (siehe oben). Weiterhin führt die zu kleine Messunsicherheit im ersten Versuchsteil ebenfalls zu einer zu kleinen Messunsicherheit bei der Bestimmung der Kernspins.
+
+Da der Versuch nicht selbst justiert wurde, ist nicht auszuschließen, dass sich über viele vorhergehende Versuchsdurchführungen hinweg die Qualität einzelner Versuchsbestandteile verschlechterte oder Fremdstoffe in die Rubidium-Zelle eindrangen. Die offensichtlichste Quelle einer Messunsicherheit ist die Kompensation des Erdmagnetfeldes entlang der Raumrichtungen. Sollte sich der Versuchsaufbau aufgrund mechanischer Stöße währen der Durchführung leicht bewegt haben, wäre das Erdmagnetfeld nicht mehr genau kompensiert gewesen.
+

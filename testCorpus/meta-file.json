@@ -1,0 +1,15 @@
+{
+"folder": "unknown",
+"language": "EN",
+"encoding": "UTF8",
+"candidate-authors":
+[
+{"author-name": "candidate00001"},
+{"author-name": "candidate00002"}
+],
+"unknown-texts":
+[
+{"unknown-text": "unknown00001.txt"},
+{"unknown-text": "unknown00002.txt"}
+]
+}
